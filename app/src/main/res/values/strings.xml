@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">StudentInfo</string>
+    <string name="empty_list">no students on record.</string>
+    <string name="first_name">first name:</string>
+    <string name="last_name">last name</string>
+    <string name="email">email</string>
+    <string name="grade">grade</string>
+    <string name="save_changes">save changes</string>
+    <string name="cancel">cancel</string>
+    <string name="add_student">add student</string>
+    <string name="full_name">%1$s %2$s</string>
+</resources>
