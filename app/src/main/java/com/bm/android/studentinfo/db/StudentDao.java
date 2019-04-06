@@ -19,7 +19,7 @@ public interface StudentDao {
     LiveData<List<Student>> getAllStudents();
 
     @Query("SELECT * FROM student_table WHERE id = :studentId")
-    LiveData<Student> getStudent(String studentId);
+    LiveData<Student> getStudent(int studentId);
 
     @Update
     void updateStudent(Student student);

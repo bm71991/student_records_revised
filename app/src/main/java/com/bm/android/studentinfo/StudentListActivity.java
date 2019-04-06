@@ -2,6 +2,7 @@ package com.bm.android.studentinfo;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity {
     private StudentListViewModel mStudentListViewModel;
+    private static final int ADD_STUDENT_REQUEST_CODE = 0;
+    private static final String STUDENT_ID_EXTRA = "com.bm.android.studentinfo.student_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +57,20 @@ public class StudentListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item)    {
         switch (item.getItemId())   {
             case (R.id.add_student):
+                Intent intent = new Intent(this, StudentActivity.class);
+                startActivityForResult(intent, ADD_STUDENT_REQUEST_CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)  {
+
+    }
+
+    public static int getStudentId(Intent data) {
+        return data.getIntExtra(STUDENT_ID_EXTRA, -1);
     }
 }

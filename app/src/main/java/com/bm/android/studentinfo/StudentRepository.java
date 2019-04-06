@@ -30,7 +30,7 @@ public class StudentRepository {
         return mAllStudents;
     }
 
-    public LiveData<Student> getStudent(String id)  {
+    public LiveData<Student> getStudent(int id)  {
         return mStudentDao.getStudent(id);
     }
 

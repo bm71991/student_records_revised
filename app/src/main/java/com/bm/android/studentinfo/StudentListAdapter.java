@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bm.android.studentinfo.db.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,6 +40,7 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     public StudentListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
+        mStudents = new ArrayList<>();
     };
 
     @Override
@@ -87,14 +89,14 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     /*To be called by observer in StudentListActivity
     when notified that LiveData list changed (onChanged)*/
     void setStudents(List<Student> students)    {
-        final StudentDiffCallback diffCallback = new StudentDiffCallback(mStudents, students);
-        /* find the difference between mStudents and the LiveData */
-        final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+            final StudentDiffCallback diffCallback = new StudentDiffCallback(mStudents, students);
+            /* find the difference between mStudents and the LiveData */
+            final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 
-        /*update the students list*/
-        mStudents.clear();
-        mStudents.addAll(students);
-        /*dispatch changes between the lists to the adapter*/
-        diffResult.dispatchUpdatesTo(this);
+            /*update students list */
+            mStudents.clear();
+            mStudents.addAll(students);
+            /*dispatch changes between the lists to the adapter*/
+            diffResult.dispatchUpdatesTo(this);
     }
 }

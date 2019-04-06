@@ -41,13 +41,15 @@ public class Student {
 
     public int getId() { return id; }
 
-    public Student(String firstName, String lastName, String email,
-                   String grade)    {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.grade = grade;
-    }
+//    public Student(String firstName, String lastName, String email,
+//                   String grade)    {
+//        this.firstName = firstName;
+//        this.lastName = lastName;
+//        this.email = email;
+//        this.grade = grade;
+//    }
+
+    public Student()    { }
 
     /*For use with updating a Student in room db (make new Student,
     enter in id of Student to update manually and set updated fields) */
