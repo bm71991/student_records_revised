@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.bm.android.studentinfo.db.Student;
 
@@ -18,22 +21,33 @@ import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity {
     private StudentListViewModel mStudentListViewModel;
+    private TextView mEmptyStudentView;
+    private RecyclerView mRecyclerView;
     private static final int ADD_STUDENT_REQUEST_CODE = 0;
     public static final String STUDENT_ID_EXTRA = "com.bm.android.studentinfo.student_id";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
-
-        /*configure student recyclerView (set adapter and layout manager)*/
-        RecyclerView recyclerView = findViewById(R.id.student_recyclerview);
-        final StudentListAdapter adapter = new StudentListAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mEmptyStudentView = findViewById(R.id.empty_view);
+        mRecyclerView = findViewById(R.id.student_recyclerview);
 
         /*get ViewModel - ViewModel will persist over configuration changes*/
         mStudentListViewModel = ViewModelProviders.of(this).get(StudentListViewModel.class);
+
+        /*configure student recyclerView (set adapter and layout manager)*/
+        final StudentListAdapter adapter = new StudentListAdapter(this,
+                mStudentListViewModel);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        /*add swiping functionality for deletion of items in the recyclerView.*/
+        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(adapter);
+        ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(mRecyclerView);
+
         /*set an observer on the ViewModel LiveData in order to alert the adapter
         when the LiveData has changed.
          */
@@ -42,6 +56,8 @@ public class StudentListActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Student> students) {
                 /*update student list in the adapter using DiffUtil*/
                 adapter.setStudents(students);
+                /*check whether to toggle between empty view or recyclerview*/
+                checkViewState(adapter);
             }
         });
     }
@@ -72,6 +88,16 @@ public class StudentListActivity extends AppCompatActivity {
 
     public static int getStudentId(Intent data) {
         return data.getIntExtra(STUDENT_ID_EXTRA, -1);
+    }
+
+    private void checkViewState(StudentListAdapter adapter)   {
+        if (adapter.getItemCount() == 0)   {
+            mEmptyStudentView.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        } else  {
+            mEmptyStudentView.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
 }

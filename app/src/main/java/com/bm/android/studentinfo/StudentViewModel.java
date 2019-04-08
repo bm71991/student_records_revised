@@ -29,21 +29,28 @@ public class StudentViewModel extends AndroidViewModel {
         return mStudent;
     }
 
-    /*To be called when save button is clicked in StudentActivity*/
+    /*To be called when save button is clicked in StudentActivity for student already in the DB.
+     * A new object with the same id as mStudent but with values of the EditTexts for the fields
+      * is passed into updateStudent query*/
     public void updateStudent(HashMap<String, String> fieldValues)  {
-       /*change fields of student object to values in StudentActivity EditTexts*/
-        /*update student in Room db*/
-//        mRepository.updateStudent(updatedStudent);
+      int studentId = mStudent.getValue().getId();
+      Student student = new Student(studentId);
+      setFields(student, fieldValues);
+      mRepository.updateStudent(student);
     }
 
-    /*To be called when save button is clicked in StudentActivity and is new student*/
+    /*To be called when save button is clicked in StudentActivity for a new student*/
     public void addStudent(HashMap<String, String> fieldValues) {
         Student student = new Student();
+        setFields(student, fieldValues);
+        /*adds new student to the room db*/
+        mRepository.addStudent(student);
+    }
+
+    private void setFields(Student student, HashMap<String, String> fieldValues)  {
         student.setFirstName(fieldValues.get("firstName"));
         student.setLastName(fieldValues.get("lastName"));
         student.setGrade(fieldValues.get("grade"));
         student.setEmail(fieldValues.get("email"));
-        /*adds new student to the room db*/
-        mRepository.addStudent(student);
     }
 }

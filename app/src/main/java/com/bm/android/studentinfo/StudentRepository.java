@@ -32,7 +32,6 @@ public class StudentRepository {
     }
 
     public LiveData<Student> getStudent(int id)  {
-        Log.d("test", "getStudent in repository called");
         return mStudentDao.getStudent(id);
     }
 

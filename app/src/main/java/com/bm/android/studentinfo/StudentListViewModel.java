@@ -21,5 +21,4 @@ public class StudentListViewModel extends AndroidViewModel {
     public LiveData<List<Student>> getAllStudents() {return allStudents;}
 
     public void deleteStudent(Student student)   {mRepository.deleteStudent(student);}
-
 }

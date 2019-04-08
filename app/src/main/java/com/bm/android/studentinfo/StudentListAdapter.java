@@ -36,7 +36,6 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("test", "in onClick");
                     Intent intent = getStudentIntent(id, v.getContext());
                     v.getContext().startActivity(intent);
                 }
@@ -48,12 +47,14 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     /*Stored list of students in Recyclerview - will be updated when LiveData is updated*/
     private List<Student> mStudents;
     private Context mContext;
+    private StudentListViewModel mViewModel;
 
     /*set inflater for adapter to use and store context of StudentListActivity*/
-    public StudentListAdapter(Context context) {
+    public StudentListAdapter(Context context, StudentListViewModel viewModel) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mStudents = new ArrayList<>();
+        mViewModel = viewModel;
     };
 
     @Override
@@ -116,8 +117,13 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
 
     private Intent getStudentIntent(int id, Context context)    {
         Intent intent = new Intent(context, StudentActivity.class);
-        Log.d("test", "id =" + id);
         intent.putExtra(STUDENT_ID_EXTRA, id);
         return intent;
+    }
+
+    /*Called when swiping to delete an item for the recyclerView in StudentListActivity*/
+    public void onItemDismiss(int position)    {
+        Student currentStudent = mStudents.get(position);
+        mViewModel.deleteStudent(currentStudent);
     }
 }

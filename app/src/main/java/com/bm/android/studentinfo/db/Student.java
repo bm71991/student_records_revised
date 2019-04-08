@@ -54,12 +54,7 @@ public class Student {
     /*For use with updating a Student in room db (make new Student,
     enter in id of Student to update manually and set updated fields) */
     @Ignore
-    public Student(int id, String firstName, String lastName,
-                   String email, String grade) {
+    public Student(int id) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.grade = grade;
     }
 }

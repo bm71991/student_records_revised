@@ -24,6 +24,9 @@ public class StudentActivity extends AppCompatActivity {
     private EditText mEmail;
     private EditText mGrade;
     private Button mSaveButton;
+    private Button mCancelButton;
+    private Intent mData;
+    private int mStudentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +37,28 @@ public class StudentActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.email);
         mGrade = findViewById(R.id.grade);
         mSaveButton = findViewById(R.id.save_button);
+        mCancelButton = findViewById(R.id.cancel_button);
 
-        Intent data = getIntent();
-        int studentId = StudentListActivity.getStudentId(data);
+        mData = getIntent();
+        mStudentId = StudentListActivity.getStudentId(mData);
 
         /*get StudentViewModel, will survive configuration changes.*/
         mStudentViewModel = ViewModelProviders
                 .of(this, new StudentViewModelFactory(getApplication(),
                         /*studentId will be -1 if student is new, StudentViewModel will
                         handle this*/
-                        studentId) )
+                        mStudentId) )
                 .get(StudentViewModel.class);
 
         /*If this StudentActivity is displaying a student who already has a record
         in the DB:
         */
-        if (!StudentActivity.isNewStudent(studentId))    {
+        if (!StudentActivity.isNewStudent(mStudentId))    {
             LiveData<Student> currentStudent = mStudentViewModel.getStudent();
             /*
-            currentStudent will be null when the Activity was just instantiated
+            currentStudent.getValue() will be null when the Activity was just instantiated
             and the query result has not finished yet.
-            currentStudent will not be null when:
+            currentStudent.getValue() will not be null when:
                 1. onCreate is being called due to orientation change, the ViewModel is
                 not destroyed and still has the Student object stored in mStudent.
                 2. edge-case: the query returned extremely fast
@@ -75,12 +79,27 @@ public class StudentActivity extends AppCompatActivity {
     @Override
     protected void onResume()   {
         super.onResume();
+
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*add a new student to the DB*/
-                mStudentViewModel.addStudent(getFieldValues());
-                setResult(RESULT_OK);
+                if (isNewStudent(StudentActivity.this.mStudentId))  {
+                    mStudentViewModel.addStudent(getFieldValues());
+                    setResult(RESULT_OK);
+                    /* update the Student object in DB */
+                }   else    {
+                    mStudentViewModel.updateStudent(getFieldValues());
+                    setResult(RESULT_OK);
+
+                }
+                finish();
+            }
+        });
+
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
