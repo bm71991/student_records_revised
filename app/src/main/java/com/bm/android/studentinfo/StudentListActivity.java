@@ -19,7 +19,7 @@ import java.util.List;
 public class StudentListActivity extends AppCompatActivity {
     private StudentListViewModel mStudentListViewModel;
     private static final int ADD_STUDENT_REQUEST_CODE = 0;
-    private static final String STUDENT_ID_EXTRA = "com.bm.android.studentinfo.student_id";
+    public static final String STUDENT_ID_EXTRA = "com.bm.android.studentinfo.student_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,4 +73,5 @@ public class StudentListActivity extends AppCompatActivity {
     public static int getStudentId(Intent data) {
         return data.getIntExtra(STUDENT_ID_EXTRA, -1);
     }
+
 }

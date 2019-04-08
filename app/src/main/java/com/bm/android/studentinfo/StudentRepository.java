@@ -3,6 +3,7 @@ package com.bm.android.studentinfo;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.bm.android.studentinfo.db.Student;
 import com.bm.android.studentinfo.db.StudentDao;
@@ -31,6 +32,7 @@ public class StudentRepository {
     }
 
     public LiveData<Student> getStudent(int id)  {
+        Log.d("test", "getStudent in repository called");
         return mStudentDao.getStudent(id);
     }
 

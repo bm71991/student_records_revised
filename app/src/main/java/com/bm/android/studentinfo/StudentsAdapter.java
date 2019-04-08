@@ -1,7 +1,8 @@
 package com.bm.android.studentinfo;
 
 import android.content.Context;
-import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.recyclerview.extensions.ListAdapter;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,31 +17,23 @@ import com.bm.android.studentinfo.db.Student;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bm.android.studentinfo.StudentListActivity.STUDENT_ID_EXTRA;
+/****************************************************************************************
+ * Was experimenting with ListAdapter, at the moment decided to keep RecyclerView.Adapter
+ ***************************************************************************************/
 
-
-public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.StudentViewHolder> {
+public class StudentsAdapter extends ListAdapter<Student, StudentsAdapter.StudentViewHolder> {
 
     /*creates a ViewHolder for student_item.xml*/
     class StudentViewHolder extends RecyclerView.ViewHolder {
         private TextView nameView;
         private TextView gradeView;
         private ImageView pictureView;
-        private int id;
 
         private StudentViewHolder(View itemView) {
             super(itemView);
             nameView = itemView.findViewById(R.id.student_name);
             gradeView = itemView.findViewById(R.id.student_grade);
             pictureView = itemView.findViewById(R.id.student_pic);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d("test", "in onClick");
-                    Intent intent = getStudentIntent(id, v.getContext());
-                    v.getContext().startActivity(intent);
-                }
-            });
         }
     }
 
@@ -50,16 +43,36 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     private Context mContext;
 
     /*set inflater for adapter to use and store context of StudentListActivity*/
-    public StudentListAdapter(Context context) {
+    public StudentsAdapter(Context context)    {
+        super(DIFF_CALLBACK);
         mInflater = LayoutInflater.from(context);
         mContext = context;
         mStudents = new ArrayList<>();
-    };
+    }
+
+    public static final DiffUtil.ItemCallback<Student> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Student>() {
+                @Override
+                public boolean areItemsTheSame(
+                        @NonNull Student oldStudent, @NonNull Student newStudent) {
+                    // User properties may have changed if reloaded from the DB, but ID is fixed
+                    return oldStudent.getId() == newStudent.getId();
+                }
+                @Override
+                public boolean areContentsTheSame(
+                        @NonNull Student oldStudent, @NonNull Student newStudent) {
+                    return oldStudent.getFirstName().equals(newStudent.getFirstName()) &&
+                            oldStudent.getLastName().equals(newStudent.getLastName()) &&
+                            oldStudent.getEmail().equals(newStudent.getEmail()) &&
+                            oldStudent.getGrade() == newStudent.getGrade();
+                }
+            };
+
 
     @Override
     public StudentViewHolder onCreateViewHolder(ViewGroup parent, int viewType)   {
         /*Set the itemView for the particular viewHolder to hold reference to,
-        * which in this case is the inflated student_item.xml*/
+         * which in this case is the inflated student_item.xml*/
         View itemView = mInflater.inflate(R.layout.student_item, parent, false);
         return new StudentViewHolder(itemView);
     }
@@ -82,7 +95,6 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
         /*Add binding for ImageView using Glide*/
         holder.nameView.setText(fullName);
         holder.gradeView.setText(grade);
-        holder.id = currentStudent.getId();
     }
 
     @Override
@@ -103,21 +115,8 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     /*To be called by observer in StudentListActivity
     when notified that LiveData list changed (onChanged)*/
     void setStudents(List<Student> students)    {
-            final StudentDiffCallback diffCallback = new StudentDiffCallback(mStudents, students);
-            /* find the difference between mStudents and the LiveData */
-            final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
-
-            /*update students list */
-            mStudents = students;
-            /*dispatch changes between the lists to the adapter*/
-            diffResult.dispatchUpdatesTo(this);
-
-    }
-
-    private Intent getStudentIntent(int id, Context context)    {
-        Intent intent = new Intent(context, StudentActivity.class);
-        Log.d("test", "id =" + id);
-        intent.putExtra(STUDENT_ID_EXTRA, id);
-        return intent;
+        submitList(students);
+        mStudents.size();
+        Log.d("to","f");
     }
 }
