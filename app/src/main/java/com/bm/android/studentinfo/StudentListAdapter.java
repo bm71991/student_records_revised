@@ -1,7 +1,10 @@
 package com.bm.android.studentinfo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,14 +28,14 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
     class StudentViewHolder extends RecyclerView.ViewHolder {
         private TextView nameView;
         private TextView gradeView;
-        private ImageView pictureView;
+        private ImageView studentPic ;
         private int id;
 
         private StudentViewHolder(View itemView) {
             super(itemView);
             nameView = itemView.findViewById(R.id.student_name);
             gradeView = itemView.findViewById(R.id.student_grade);
-            pictureView = itemView.findViewById(R.id.student_pic);
+            studentPic= itemView.findViewById(R.id.student_pic);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -72,6 +75,9 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
             the corresponding ViewHolder.
              */
             bind(holder, position);
+            MyAppGlideModule.loadPhoto((Activity) mContext, null,
+                    (ImageView) holder.itemView.findViewById(R.id.student_pic),
+                    new ColorDrawable(Color.GRAY));
         }
     }
 

@@ -5,6 +5,8 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.bm.android.studentinfo.db.Student;
 
@@ -27,6 +30,7 @@ public class StudentActivity extends AppCompatActivity {
     private Button mCancelButton;
     private Intent mData;
     private int mStudentId;
+    private ImageView mStudentImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,7 @@ public class StudentActivity extends AppCompatActivity {
         mGrade = findViewById(R.id.grade);
         mSaveButton = findViewById(R.id.save_button);
         mCancelButton = findViewById(R.id.cancel_button);
+        mStudentImageView = findViewById(R.id.student_image_view);
 
         mData = getIntent();
         mStudentId = StudentListActivity.getStudentId(mData);
@@ -74,6 +79,9 @@ public class StudentActivity extends AppCompatActivity {
                 updateUI(currentStudent.getValue());
             }
         }
+        //For both new and old students:
+        MyAppGlideModule.loadPhoto(this, null, mStudentImageView,
+                new ColorDrawable(Color.GRAY));
     }
 
     @Override
