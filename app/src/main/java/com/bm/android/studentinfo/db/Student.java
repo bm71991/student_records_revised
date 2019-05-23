@@ -23,6 +23,8 @@ public class Student {
     @NonNull
     private String grade;
 
+    private String photoPath;
+
     @PrimaryKey(autoGenerate = true)
     @NonNull
     public int id;
@@ -39,17 +41,21 @@ public class Student {
     public String getGrade() { return grade; }
     public void setGrade(String grade) {this.grade = grade;}
 
+    public String getPhotoPath()    {
+        if (photoPath == null)  {
+            return "";
+        }
+        return photoPath;
+    }
+
+    public void setPhotoPath(String path) {
+        photoPath = path;
+    }
+
     public int getId() { return id; }
 
-//    public Student(String firstName, String lastName, String email,
-//                   String grade)    {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.grade = grade;
-//    }
-
-    public Student()    { }
+    public Student()    {
+    }
 
     /*For use with updating a Student in room db (make new Student,
     enter in id of Student to update manually and set updated fields) */

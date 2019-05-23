@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bm.android.studentinfo.db.Student;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,9 +76,6 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
             the corresponding ViewHolder.
              */
             bind(holder, position);
-            MyAppGlideModule.loadPhoto((Activity) mContext, null,
-                    (ImageView) holder.itemView.findViewById(R.id.student_pic),
-                    new ColorDrawable(Color.GRAY));
         }
     }
 
@@ -85,11 +83,16 @@ public class StudentListAdapter extends RecyclerView.Adapter<StudentListAdapter.
         Student currentStudent = mStudents.get(position);
         String fullName = getFullName(currentStudent);
         String grade = currentStudent.getGrade();
+        File photoFile = new File(mContext.getFilesDir(), currentStudent.getPhotoPath());
 
         /*Add binding for ImageView using Glide*/
         holder.nameView.setText(fullName);
         holder.gradeView.setText(grade);
         holder.id = currentStudent.getId();
+
+        MyAppGlideModule.loadPhoto((Activity) mContext, photoFile,
+                (ImageView) holder.itemView.findViewById(R.id.student_pic),
+                new ColorDrawable(Color.GRAY));
     }
 
     @Override

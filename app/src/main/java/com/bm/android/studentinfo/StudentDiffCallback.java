@@ -43,6 +43,7 @@ public class StudentDiffCallback extends DiffUtil.Callback {
         return oldStudent.getFirstName().equals(newStudent.getFirstName()) &&
                 oldStudent.getLastName().equals(newStudent.getLastName()) &&
                 oldStudent.getEmail().equals(newStudent.getEmail()) &&
-                oldStudent.getGrade() == newStudent.getGrade();
+                oldStudent.getGrade() == newStudent.getGrade() &&
+                oldStudent.getPhotoPath().equals(newStudent.getPhotoPath());
     }
 }
