@@ -1,6 +1,6 @@
 # student_records_revised
 
-Second version of student_records Android application. Users can do CRUD operations on student information (name, grade, picture, etc).  Android Jetpack architecture components were used in order to create an application more structurally coherent than the initial attempt (student_records).
+Revised version of student_records Android application. Users can do CRUD operations on student information (name, grade, picture, etc).  Android Jetpack architecture components were used in order to create an application more structurally coherent than the initial attempt (student_records).
 
 # Jetpack components used:
 
