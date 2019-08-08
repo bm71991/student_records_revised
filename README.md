@@ -20,4 +20,4 @@ Revised version of student_records Android application. Users can do CRUD operat
 
 -DiffUtil is used instead of notifyDataSetChanged to detect changes to the student recyclerview in StudentListActivity, which are then dispatched to its adapter.
 
--photos are taken and then written into internal storage using FileProvider
+-Photos are taken and then written into internal storage using FileProvider
